@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agency Mastermind — Course Library</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0B0D12;
+    --panel: #12151C;
+    --panel-2: #161A23;
+    --border: #232838;
+    --text: #EDEFF3;
+    --text-dim: #8C93A3;
+    --text-faint: #5B6275;
+    --blue: #4F8CFF;
+    --green: #3DD68C;
+    --amber: #F2B33D;
+    --violet: #A48BFA;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', -apple-system, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    padding: 24px 22px 18px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.6;
+  }
+
+  .brand::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-right: 8px;
+    box-shadow: 0 0 8px var(--green);
+  }
+
+  .nav-scroll {
+    overflow-y: auto;
+    padding: 14px 10px 40px;
+    flex: 1;
+  }
+
+  .nav-mod {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    padding: 9px 12px;
+    border-radius: 6px;
+    margin-top: 6px;
+    transition: background 0.15s;
+  }
+  .nav-mod:hover { background: var(--panel-2); }
+
+  .nav-subs {
+    display: flex;
+    flex-direction: column;
+    margin: 2px 0 6px 12px;
+    border-left: 1px solid var(--border);
+    padding-left: 12px;
+  }
+
+  .nav-sub {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 6px 8px;
+    border-radius: 5px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav-sub:hover { background: var(--panel-2); color: var(--text); }
+
+  /* ---------- Main ---------- */
+  main {
+    flex: 1;
+    min-width: 0;
+    padding: 56px 64px 120px;
+    max-width: 880px;
+  }
+
+  .page-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--blue);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .page-title {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 12px;
+  }
+
+  .page-sub {
+    color: var(--text-dim);
+    font-size: 15px;
+    max-width: 540px;
+    line-height: 1.6;
+    margin-bottom: 56px;
+  }
+
+  .module {
+    margin-bottom: 64px;
+    padding-top: 8px;
+  }
+
+  .module-head h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sub-head {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin: 36px 0 14px;
+    padding-top: 4px;
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .row {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    transition: border-color 0.15s;
+  }
+  .row:hover { border-color: #2E3548; }
+
+  .row-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .row-link {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    margin-top: 6px;
+  }
+
+  .row-note {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-top: 6px;
+    padding: 10px 12px;
+    background: var(--panel-2);
+    border-radius: 6px;
+    border-left: 2px solid var(--border);
+  }
+
+  .prefix {
+    color: var(--text-dim);
+    font-size: 12.5px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 2px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .tag-video {
+    background: rgba(61, 214, 140, 0.12);
+    color: var(--green);
+  }
+  .tag-doc {
+    background: rgba(79, 140, 255, 0.12);
+    color: var(--blue);
+  }
+  .tag-sheet {
+    background: rgba(242, 179, 61, 0.12);
+    color: var(--amber);
+  }
+  .tag-link {
+    background: rgba(164, 139, 250, 0.12);
+    color: var(--violet);
+  }
+
+  .row-link a {
+    color: var(--text-dim);
+    text-decoration: none;
+    word-break: break-all;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    transition: color 0.15s;
+  }
+  .row-link a:hover {
+    color: var(--blue);
+    text-decoration: underline;
+  }
+
+  footer {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    margin-top: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    main { padding: 40px 24px 100px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="sidebar"><div class="brand">AI AGENCY<br>MASTERMIND</div><div class="nav-scroll">
+<a class="nav-mod" href="#mod-1">1. ✍️ | Online Business Basics</a>
+<a class="nav-mod" href="#mod-2">2. 🎯 | Branding & Offer Creation</a>
+<div class="nav-subs">
+<a class="nav-sub" href="#mod-2-0">🏛️ | AI Agency Branding</a>
+<a class="nav-sub" href="#mod-2-1">🎯 | Offer Creation</a>
+</div>
+<a class="nav-mod" href="#mod-3">3. ⚙️ | Backend Systems Setup</a>
+<div class="nav-subs">
+<a class="nav-sub" href="#mod-3-0">🛠️ | GoHighLevel Setup</a>
+</div>
+<a class="nav-mod" href="#mod-4">4. 📈 | Marketing & Appt Setting</a>
+<div class="nav-subs">
+<a class="nav-sub" href="#mod-4-0">📊 | Paid Ads</a>
+<a class="nav-sub" href="#mod-4-1">📩 | Cold Outreach</a>
+<a class="nav-sub" href="#mod-4-2">🎬 | Organic YT Videos</a>
+</div>
+<a class="nav-mod" href="#mod-5">5. 💰 | Sales Call Mastery</a>
+<div class="nav-subs">
+<a class="nav-sub" href="#mod-5-0">💎 | Understanding The Value Of AI</a>
+<a class="nav-sub" href="#mod-5-1">🧠 | Sales Psychology & Positioning</a>
+<a class="nav-sub" href="#mod-5-2">📞 | Discovery Calls & Demos That Convert</a>
+<a class="nav-sub" href="#mod-5-3">💸 | Objection Handling & Closing</a>
+<a class="nav-sub" href="#mod-5-4">🙌 | Extra Sales Guides & Trainings</a>
+</div>
+<a class="nav-mod" href="#mod-6">6. 🤖 | AI Fulfillment Training</a>
+<div class="nav-subs">
+<a class="nav-sub" href="#mod-6-0">👤 | Client Fulfillment Videos</a>
+<a class="nav-sub" href="#mod-6-1">📞 | AI Callers Basics</a>
+<a class="nav-sub" href="#mod-6-2">🤖 | How To Set Up An AI Caller</a>
+</div>
+<a class="nav-mod" href="#mod-7">📚 | THE LIBRARY</a>
+<div class="nav-subs">
+<a class="nav-sub" href="#mod-7-0">⚙️ | GoHighLevel Snapshot</a>
+<a class="nav-sub" href="#mod-7-1">✅ | AI Agency Worksheet & Checklist</a>
+<a class="nav-sub" href="#mod-7-2">📖 | Playbooks</a>
+<a class="nav-sub" href="#mod-7-3">📝 | Sales Scripts</a>
+<a class="nav-sub" href="#mod-7-4">💻 | Templates</a>
+<a class="nav-sub" href="#mod-7-5">🧶 | Miscellaneous Materials</a>
+</div>
+</div></nav>
+<main>
+<div class="page-eyebrow">● COURSE LIBRARY</div>
+<h1 class="page-title">AI Agency Mastermind</h1>
+<p class="page-sub">Every module, video, doc, and resource in one place — from setting up your business to fulfilling AI caller clients. Jump to any section using the sidebar.</p>
+
+<section class="module" id="mod-1">
+<div class="module-head"><h1>1. ✍️ | Online Business Basics</h1></div>
+<div class="rows">
+<div class="row">
+<div class="row-title">Welcome To Online Business Basics</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/2fe5b42f513a47d1ab971c74e71db722?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/2fe5b42f513a47d1ab971c74e71db722?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Using FanBasis To Process Your Payments</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/ede25e22391d4c00ad576549d5f9d2ae?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/ede25e22391d4c00ad576549d5f9d2ae?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Formulating Your Business (Creating LLC)</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/5d1aff621e8a43db971a6b609049e711?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/5d1aff621e8a43db971a6b609049e711?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Not Spending When You Do Not Have To</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/c0757ffefcfd4c45ac31817cf5296c49?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/c0757ffefcfd4c45ac31817cf5296c49?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Do not have shiny object syndrome</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/5a5e8eaaa3024fa8bf45fa4ac26bf37b?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/5a5e8eaaa3024fa8bf45fa4ac26bf37b?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Spending Time On Income-Generating Activities</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/1474b042fd4d4ae09d90c506cdeb0fba?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/1474b042fd4d4ae09d90c506cdeb0fba?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Machine Mindset</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/2792df404d0a498399e2291d211c7f07?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/2792df404d0a498399e2291d211c7f07?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">The Man In The Arena</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/73d7e136cf0a49fea80e7d136ab2d0e2?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/73d7e136cf0a49fea80e7d136ab2d0e2?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">DFY AI Caller Client Fulfillment Service</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/3a8e00de51b547b9af07da8b49d9b749?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/3a8e00de51b547b9af07da8b49d9b749?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+</section>
+<section class="module" id="mod-2">
+<div class="module-head"><h1>2. 🎯 | Branding & Offer Creation</h1></div>
+<h2 class="sub-head" id="mod-2-0">🏛️ | AI Agency Branding</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">Picking your Niche</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/17541ab48f6f4626a189af67e82d37c9?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/17541ab48f6f4626a189af67e82d37c9?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Picking your company name & Domain through GoDaddy</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/1d0758171db0469980234c1a5c47217b?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/1d0758171db0469980234c1a5c47217b?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Creating your logo with Canva or Dall-E on ChatGPT</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/bf2d67d808a24a788e8f631d7190496e?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/bf2d67d808a24a788e8f631d7190496e?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Creating your Mission statement</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/83218bf69b8d4efaab5bb25dc7e73610?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/83218bf69b8d4efaab5bb25dc7e73610?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-2-1">🎯 | Offer Creation</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">Your First 5 clients build your business</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/36173ee520f94cf88595b3e0d2813784?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/36173ee520f94cf88595b3e0d2813784?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Commoditized Agency Offer VS AI Agency Offer</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/4a8af77a8a374cafba25caccfdf7ff4b?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/4a8af77a8a374cafba25caccfdf7ff4b?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">The proven 3-Step AI Agency offer</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/7e80f155cf4c403b93dab1406c0fb6d2?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/7e80f155cf4c403b93dab1406c0fb6d2?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">The 2 Ways To Price Your Offer</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/15ae634ae9da4469a5fd0c46c71e4911?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/15ae634ae9da4469a5fd0c46c71e4911?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">The Bulletproof Guarantee</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/7d8d634767514216971d69b86754cf55?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/7d8d634767514216971d69b86754cf55?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Offer Pre-Mortem</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/652919804dae48ee86dd35fd9cfccfd4?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/652919804dae48ee86dd35fd9cfccfd4?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+</section>
+<section class="module" id="mod-3">
+<div class="module-head"><h1>3. ⚙️ | Backend Systems Setup</h1></div>
+<h2 class="sub-head" id="mod-3-0">🛠️ | GoHighLevel Setup</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">Why GoHighLevel Is Essential</div>
+<div class="row-link">
+<span class="prefix">Import Snapshot Link:</span>
+<span class="tag tag-link">GHL</span>
+<a href="https://affiliates.gohighlevel.com/?fp_ref=tacticalconsulting-io45&share=6bmzQevR0n8COWFu5xtV" target="_blank" rel="noopener">https://affiliates.gohighlevel.com/?fp_ref=tacticalconsulting-io45&share=6bmzQevR0n8COWFu5xtV</a>
+</div>
+<div class="row-note">For context: These are the same videos used in Carson's 10-Hour Course (GoHighLevel section). This ensures there are no automation conflicts when people join and avoids confusion from differing instructions given in the past. This keeps everything fully aligned.</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/4001440718b9411cbbdfda2fa25d6df2?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/4001440718b9411cbbdfda2fa25d6df2?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Signing Up & Snapshot Import</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/cd6d53f194f04c568bb414f0a81f89f5?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/cd6d53f194f04c568bb414f0a81f89f5?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">CRM & Pipeline Setup</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/b9dfedc90f724e0299f2bcaeaa3eb8d3?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/b9dfedc90f724e0299f2bcaeaa3eb8d3?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Calendar & Booking System</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/9da502b955d141b5ac3b79a06130b2b6?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/9da502b955d141b5ac3b79a06130b2b6?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Websites & Funnels</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/1148b2b3ed0f41bc87c5fe49a1eb5f99?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/1148b2b3ed0f41bc87c5fe49a1eb5f99?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Automations & Workflows</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/fa040a809f204a8c801e20e197cb51d9?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/fa040a809f204a8c801e20e197cb51d9?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Phone Number + Emails</div>
+<div class="row-link">
+<span class="prefix">A2P Review Document - Guidelines (2026):</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/10S0zCP_JaCtNppgmTMEkwI8PKPMH9uiwtvEnEww577o/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/10S0zCP_JaCtNppgmTMEkwI8PKPMH9uiwtvEnEww577o/edit?usp=sharing</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/756b6d9921f443b3b941725332184a46?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/756b6d9921f443b3b941725332184a46?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Best Practices & Scaling</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/fd31767f96dc4643ad3dbc7408538ce2?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/fd31767f96dc4643ad3dbc7408538ce2?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Sales Funnel Masterclass - March 2026</div>
+<div class="row-link">
+<span class="prefix">Google doc breakdown:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1CZU8_gyssDSb-iZABN5e6horMQKD6N9zqDqOI6in9Fs/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1CZU8_gyssDSb-iZABN5e6horMQKD6N9zqDqOI6in9Fs/edit?usp=sharing</a>
+</div>
+</div>
+</div>
+</section>
+<section class="module" id="mod-4">
+<div class="module-head"><h1>4. 📈 | Marketing & Appt Setting</h1></div>
+<h2 class="sub-head" id="mod-4-0">📊 | Paid Ads</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">2026 Paid Ads Masterclass</div>
+<div class="row-link">
+<span class="prefix">Here is the doc I covered as well:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1R2w-HtGrzvY9UD1eLl7hVmjm0mhTZ2ggxFT8S6YxUWo/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1R2w-HtGrzvY9UD1eLl7hVmjm0mhTZ2ggxFT8S6YxUWo/edit?usp=sharing</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Static vs Video Ads</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/202a6f6f8bd844ef98c7cdc102167632?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/202a6f6f8bd844ef98c7cdc102167632?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Setting up FB & IG Page</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/bf8954ade2924cd3959bf129b96a04e7?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/bf8954ade2924cd3959bf129b96a04e7?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Setting up Ad Campaign setup</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/09e362d72147413394f40b0412908916?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/09e362d72147413394f40b0412908916?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Setting up Meta Pixel</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/70218cab52a6447387ddb7e8c43553cb?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/70218cab52a6447387ddb7e8c43553cb?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-4-1">📩 | Cold Outreach</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">Basics to Cold Outreach</div>
+<div class="row-link">
+<span class="prefix">Access The Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1NmKpOAlStpUClEqxbPsLqhzpZE-oQMEKdgCBYWbp9sE/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1NmKpOAlStpUClEqxbPsLqhzpZE-oQMEKdgCBYWbp9sE/edit?usp=sharing</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/211be4dbf82e472897e3a477ca28b754?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/211be4dbf82e472897e3a477ca28b754?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">SMS Outreach</div>
+<div class="row-link">
+<span class="prefix">Access The SMS Outreach Snapshot:</span>
+<span class="tag tag-link">GHL</span>
+<a href="https://affiliates.gohighlevel.com/?fp_ref=emberflow36&share=NnOcUPE6XbdlX84XQUeg" target="_blank" rel="noopener">https://affiliates.gohighlevel.com/?fp_ref=emberflow36&share=NnOcUPE6XbdlX84XQUeg</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/31ebac97820546f285e38bee76188036?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/31ebac97820546f285e38bee76188036?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Cold Calling (Scripts Included)</div>
+<div class="row-link">
+<span class="prefix">Access The Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1ip0qzTCD6zrlNMN4AwpZgvPmwFXcvArbRM76h4WeNRc/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1ip0qzTCD6zrlNMN4AwpZgvPmwFXcvArbRM76h4WeNRc/edit?usp=sharing</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/dbc17a95fff945b084dc13a40c6b2342?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/dbc17a95fff945b084dc13a40c6b2342?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Scraping Leads</div>
+<div class="row-link">
+<span class="prefix">Access The Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/149q0GDSDIiirRU8oaOg7Kpf2AdLNhT3gKZVFI2OJ0l0/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/149q0GDSDIiirRU8oaOg7Kpf2AdLNhT3gKZVFI2OJ0l0/edit?usp=sharing</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/181b0dda2ba243ac901549521b640642?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/181b0dda2ba243ac901549521b640642?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Scraping Leads (Part 2)</div>
+<div class="row-link">
+<span class="prefix">Access The Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/149q0GDSDIiirRU8oaOg7Kpf2AdLNhT3gKZVFI2OJ0l0/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/149q0GDSDIiirRU8oaOg7Kpf2AdLNhT3gKZVFI2OJ0l0/edit?usp=sharing</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/f41ee04e675b4654a11a03c4a489538a?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/f41ee04e675b4654a11a03c4a489538a?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-4-2">🎬 | Organic YT Videos</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">YT Channel Setup</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/e6264cc7e6ae4cbf9c97251064082d23?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/e6264cc7e6ae4cbf9c97251064082d23?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">YouTube Sales Process Walkthrough</div>
+<div class="row-link">
+<span class="prefix">Access The Document:</span>
+<span class="tag tag-link">LINK</span>
+<a href="https://lucid.app/lucidchart/5b6f8d4b-213c-4d29-b133-6658f02dd585/edit?invitationId=inv_445c48d1-d591-4543-8da2-3d0efc7bed2e" target="_blank" rel="noopener">https://lucid.app/lucidchart/5b6f8d4b-213c-4d29-b133-6658f02dd585/edit?invitationId=inv_445c48d1-d591-4543-8da2-3d0efc7bed2e</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/57f5dc3e6eb940c3818933439b0ba566?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/57f5dc3e6eb940c3818933439b0ba566?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">3 Aspects of every video</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/46d370108ff04724811743e79ec86d91?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/46d370108ff04724811743e79ec86d91?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Video Packaging Guide</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/e0e3fa2da2044ff28823e28a207554e6?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/e0e3fa2da2044ff28823e28a207554e6?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Video Delivery Guide</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/9790a0261d0d454d8fe80a7a24590e97?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/9790a0261d0d454d8fe80a7a24590e97?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Video Pitch Guide</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/367232ca507642ff9874b860d95230de?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/367232ca507642ff9874b860d95230de?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">How To Find Good Thumbnail Designers On Fiverr</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/f0e2e5dba2fe4bf0b7bb61398f788973?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/f0e2e5dba2fe4bf0b7bb61398f788973?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">3 Ready-to-Post Content Ideas</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/11c6110051ce4f74aff3065faee29219?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/11c6110051ce4f74aff3065faee29219?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+<div class="row-link">
+<span class="prefix">Access The Document:</span>
+<span class="tag tag-link">LINK</span>
+<a href="https://lucid.app/lucidchart/5b6f8d4b-213c-4d29-b133-6658f02dd585/edit?invitationId=inv_445c48d1-d591-4543-8da2-3d0efc7bed2e" target="_blank" rel="noopener">https://lucid.app/lucidchart/5b6f8d4b-213c-4d29-b133-6658f02dd585/edit?invitationId=inv_445c48d1-d591-4543-8da2-3d0efc7bed2e</a>
+</div>
+</div>
+</div>
+</section>
+<section class="module" id="mod-5">
+<div class="module-head"><h1>5. 💰 | Sales Call Mastery</h1></div>
+<h2 class="sub-head" id="mod-5-0">💎 | Understanding The Value Of AI</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">Introduction To The Sale Section</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/b556d472a388413896a6d7b3f578417a?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/b556d472a388413896a6d7b3f578417a?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Module 1 Overview</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/7b6b2f99ec364bfda61a9536a6d5ce5e?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/7b6b2f99ec364bfda61a9536a6d5ce5e?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">The Three Pillars</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/421163c8ed9a43b5b857a30101473113?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/421163c8ed9a43b5b857a30101473113?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Outcomes Over Features</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/93758e9a03594518bb7fcd328487b832?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/93758e9a03594518bb7fcd328487b832?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Real-World Metrics on efficiency when using AI</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/460c552753994da2a8e9a8d6914896cd?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/460c552753994da2a8e9a8d6914896cd?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-5-1">🧠 | Sales Psychology & Positioning</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">Section 2 Overview</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/4dfc065062b741ea82d5d039d9ebc48c?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/4dfc065062b741ea82d5d039d9ebc48c?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Framing AI as an Investment, Not a Cost</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/797644d957254a34844aafd7e4a9bf9a?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/797644d957254a34844aafd7e4a9bf9a?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Understanding Status Delta + Positioning</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/d6135f49d1f7428ca7bb4d0150d0402d?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/d6135f49d1f7428ca7bb4d0150d0402d?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">The Buyer's Mindset: Fear, Frustration, and Desire</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/893e3dc980af4ed19c17693a28df1753?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/893e3dc980af4ed19c17693a28df1753?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">How to Speak Their Language</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/a4f21fbcaed74ddf947178d17cb41236?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/a4f21fbcaed74ddf947178d17cb41236?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-5-2">📞 | Discovery Calls & Demos That Convert</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">Section 3 Overview</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/076d8dda0cc04012990e9f311f72f5c4?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/076d8dda0cc04012990e9f311f72f5c4?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">The 3-Phase AI Demo Flow</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/368d835269ab489fbd69fd5a2247ca5c?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/368d835269ab489fbd69fd5a2247ca5c?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Discovery Questions That Sell Themselves</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/ab882e8a740a4489b35e0abf965093b0?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/ab882e8a740a4489b35e0abf965093b0?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Showing the AI In Action (Live or Simulated)</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/91946e5c1b304d94a1c9914842d22f54?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/91946e5c1b304d94a1c9914842d22f54?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Decision-Maker Psychology Buyer Signals</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/71d94244d7af433bbe2d9ccc8ef7a463?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/71d94244d7af433bbe2d9ccc8ef7a463?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Mastering The Art of The One Call Close</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/ffb854467bfd4355b946f3dcf7f7b4ef?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/ffb854467bfd4355b946f3dcf7f7b4ef?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-5-3">💸 | Objection Handling & Closing</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">Objections Specific to AI & How To Handle Them</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/88ee9bb6b39f45beb13cf3b373175eac?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/88ee9bb6b39f45beb13cf3b373175eac?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Risk Reversal & Trust Levers</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/0ac208e4ef49444c8dc9222f81a3ec34?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/0ac208e4ef49444c8dc9222f81a3ec34?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Urgency Without Pressure — Scarcity + Logic</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/ff16ea6996154b08babd53c4a5a21a99?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/ff16ea6996154b08babd53c4a5a21a99?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Contracts Guarantees and Payment Terms</div>
+<div class="row-link">
+<span class="prefix">Access Dakota's Document:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link" target="_blank" rel="noopener">https://docs.google.com/document/d/1YTAKR2yO6L_gma-feBs4EDSTZkm0SfJU6dv7gbFuL44/edit?usp=drive_link</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/7ad549ed461b41faaf0e12b9bcd36400?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/7ad549ed461b41faaf0e12b9bcd36400?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-5-4">🙌 | Extra Sales Guides & Trainings</h2>
+<div class="rows">
+<div class="row">
+<div class="row-link">
+<span class="tag tag-link">SKOOL</span>
+<a href="https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=65ed014a9e0f4506ab2d362c64f87e71" target="_blank" rel="noopener">https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=65ed014a9e0f4506ab2d362c64f87e71</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="tag tag-link">SKOOL</span>
+<a href="https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=e7d21d228abb47d4b4d0971c74db8511" target="_blank" rel="noopener">https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=e7d21d228abb47d4b4d0971c74db8511</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="tag tag-link">SKOOL</span>
+<a href="https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=3da3a2f12d0f4acbb0c3a8046cb591be" target="_blank" rel="noopener">https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=3da3a2f12d0f4acbb0c3a8046cb591be</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="tag tag-link">SKOOL</span>
+<a href="https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=cac4511f0e9b48f08734e62d79c8a221" target="_blank" rel="noopener">https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=cac4511f0e9b48f08734e62d79c8a221</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="tag tag-link">SKOOL</span>
+<a href="https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=25b78fc053a54d47b9f95a9e77b525db" target="_blank" rel="noopener">https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=25b78fc053a54d47b9f95a9e77b525db</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="tag tag-link">SKOOL</span>
+<a href="https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=4ea94cc985b941df8217877995e6d942" target="_blank" rel="noopener">https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=4ea94cc985b941df8217877995e6d942</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="tag tag-link">SKOOL</span>
+<a href="https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=d33ebc629b34414dbc25ed19fe44eecf" target="_blank" rel="noopener">https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=d33ebc629b34414dbc25ed19fe44eecf</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="tag tag-link">SKOOL</span>
+<a href="https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=e674b7ab112f45449767939ff77dfc49" target="_blank" rel="noopener">https://www.skool.com/aiagencymastermind/classroom/0a1becef?md=e674b7ab112f45449767939ff77dfc49</a>
+</div>
+</div>
+</div>
+</section>
+<section class="module" id="mod-6">
+<div class="module-head"><h1>6. 🤖 | AI Fulfillment Training</h1></div>
+<h2 class="sub-head" id="mod-6-0">👤 | Client Fulfillment Videos</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">2026 Client Fulfillment Masterclass LIVE</div>
+<div class="row-link">
+<span class="prefix">Document used in video:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1B_1jLIkRiELEhiAv2wnOw2LwiC4cBkrfDDv_s_6_hK0/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1B_1jLIkRiELEhiAv2wnOw2LwiC4cBkrfDDv_s_6_hK0/edit?usp=sharing</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Carson's Client Fulfillment Masterclass</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/e2a76f49c5c44ff9845dee80b4b627f3?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/e2a76f49c5c44ff9845dee80b4b627f3?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Hiring & Outsourcing (Upwork & Agencies)</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/d3c0cf3e582846ab99d923407f73e920?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/d3c0cf3e582846ab99d923407f73e920?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Advanced Client Fulfillment Training</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/9d645c1dc6114db08c92fe7a553a966e?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/9d645c1dc6114db08c92fe7a553a966e?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-6-1">📞 | AI Callers Basics</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">Intro To AI Callers Section</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/eaa4417682a24d189b749a85aa5f0687?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/eaa4417682a24d189b749a85aa5f0687?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">DFY AI Caller Fulfillment Service</div>
+<div class="row-note">If you do not want to fulfill AI callers for your clients yourself, we offer a "done for you" client fulfillment service, where one of our U.S.-based developers will build your AI callers for you.</div>
+<div class="row-link">
+<span class="prefix">2 Plans:<br>
+  1. Basic AI Caller Setup (DFY): $1,000 —</span>
+<span class="tag tag-link">CHECKOUT</span>
+<a href="https://www.fanbasis.com/agency-checkout/903804840398408309438350538053849080945092384094/1wkjG" target="_blank" rel="noopener">https://www.fanbasis.com/agency-checkout/903804840398408309438350538053849080945092384094/1wkjG</a>
+</div>
+<div class="row-note">@Emanuel Termure on Discord is our AI Developer, any questions about working with him and this service can go in "📦│service-delivery" on Discord.</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/3a8e00de51b547b9af07da8b49d9b749?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/3a8e00de51b547b9af07da8b49d9b749?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">AI Demos For Your Sales Calls</div>
+<div class="row-link">
+<span class="prefix">Click on the Google Drive link to access all the demos:</span>
+<span class="tag tag-doc">DRIVE</span>
+<a href="https://drive.google.com/drive/folders/1r5Uf4c8bD0B8P-e1sBwu1wKiYMcsYHt-?usp=sharing" target="_blank" rel="noopener">https://drive.google.com/drive/folders/1r5Uf4c8bD0B8P-e1sBwu1wKiYMcsYHt-?usp=sharing</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/55e43f4c03da4fa69c774f537e6e198f?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/55e43f4c03da4fa69c774f537e6e198f?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-6-2">🤖 | How To Set Up An AI Caller</h2>
+<div class="rows">
+<div class="row">
+<div class="row-title">How To Use Retell & Vapi</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/9d1324e6e8624c1c8e125b0b94e620a2?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/9d1324e6e8624c1c8e125b0b94e620a2?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">How To Install Sympana Connector</div>
+<div class="row-link">
+<span class="prefix">Download Sympana Connector using this link:</span>
+<span class="tag tag-link">GHL</span>
+<a href="https://app.gohighlevel.com/sympanaconnector" target="_blank" rel="noopener">https://app.gohighlevel.com/sympanaconnector</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/12887ca15ebd441a8cf1f0059d260bcc?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/12887ca15ebd441a8cf1f0059d260bcc?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">How To Use Sympana Web App</div>
+<div class="row-note"><strong>1. Web App</strong> — The web app contains all the basic connections you'd normally need with GoHighLevel (GHL): book, cancel, and reschedule appointments; get or create contacts; and other core functions. These are built directly into the web app to make things cheaper and easier — instead of relying on premium triggers or actions, you save money and reduce complexity. It's also designed to make connecting with Retell or Vapi simple and smooth. The first video shows how to set up this initial connection between Retell/Vapi and GHL using the web app.
+  <br><br>
+  <strong>2. Automations</strong> — The automation side works inside GHL's native automation builder — no extra tools, just drag and drop. The automation triggers you'll have access to are: Place Call and Get Call. The next video walks through building automations with these triggers.
+  <br><br>
+  👉 The main point: Web App = core connections + easy/cheap setup. Automations = native GHL drag-and-drop triggers (calls).</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/d8178f1b2d8b41c89a1ad4bd4ffbbf57?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/d8178f1b2d8b41c89a1ad4bd4ffbbf57?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">How To Build Automations With Sympana Connector</div>
+<div class="row-note">Here is the snapshot for GoHighLevel to immediately download all of the automations (click here for the GoHighLevel snapshot). However, it's strongly recommended to follow along with the walkthrough to see how the automations were built, so you'll understand how everything works and can customize it for your niche.</div>
+<div class="row-note">Currently, you cannot connect your GHL number to Retell. You'll need to either purchase a number directly from Retell or connect a number from your call provider. This won't work with some providers, so make sure your call provider supports Elastic SIPs.</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/bad54addf0164db8bfe02d479d16df7f?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/bad54addf0164db8bfe02d479d16df7f?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Prompt Engineering Guide + Custom GPT</div>
+<div class="row-link">
+<span class="prefix">Use our custom built GPT for the mastermind to write your prompt:</span>
+<span class="tag tag-link">GPT</span>
+<a href="https://chatgpt.com/g/g-68d86c492fc481918b4c0d82e3d5a0c8-carsons-prompt-creation-gpt" target="_blank" rel="noopener">https://chatgpt.com/g/g-68d86c492fc481918b4c0d82e3d5a0c8-carsons-prompt-creation-gpt</a>
+</div>
+<div class="row-link">
+<span class="prefix">ChatGPT Agent Builder Template:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1c0BkYX3-8j5g3WFhDDbT-KU3u3k-lUMykYPB_BwKS6Q/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1c0BkYX3-8j5g3WFhDDbT-KU3u3k-lUMykYPB_BwKS6Q/edit?usp=sharing</a>
+</div>
+<div class="row-link">
+<span class="prefix">Sympana Connector Documentation:</span>
+<span class="tag tag-link">DOCS</span>
+<a href="https://sympana.gitbook.io/sympana/" target="_blank" rel="noopener">https://sympana.gitbook.io/sympana/</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/4aacba6a00564230b43fa752b2cafdb8?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/4aacba6a00564230b43fa752b2cafdb8?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">What Is The Best Voice AI Platform</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/f800cfb523c943db9d58b4d89f9dcd22?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/f800cfb523c943db9d58b4d89f9dcd22?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-title">Sympana Connector Pricing</div>
+<div class="row-link">
+<span class="prefix">Install Sympana Connector:</span>
+<span class="tag tag-link">GHL</span>
+<a href="https://app.gohighlevel.com/sympanaconnector" target="_blank" rel="noopener">https://app.gohighlevel.com/sympanaconnector</a>
+</div>
+<div class="row-link">
+<span class="tag tag-video">VIDEO</span>
+<a href="https://www.loom.com/embed/9071d36efc3f460e9c58cb1674becbf4?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" target="_blank" rel="noopener">https://www.loom.com/embed/9071d36efc3f460e9c58cb1674becbf4?autoplay=0&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true</a>
+</div>
+</div>
+</div>
+</section>
+<section class="module" id="mod-7">
+<div class="module-head"><h1>📚 | THE LIBRARY</h1></div>
+<h2 class="sub-head" id="mod-7-0">⚙️ | GoHighLevel Snapshot</h2>
+<div class="rows">
+<div class="row">
+<div class="row-link">
+<span class="prefix">Click the link below to add the snapshot to your account:</span>
+<span class="tag tag-link">GHL</span>
+<a href="https://affiliates.gohighlevel.com/?fp_ref=carsonreed&share=HTh8aTkjqMoC8fA4Hsy1" target="_blank" rel="noopener">https://affiliates.gohighlevel.com/?fp_ref=carsonreed&share=HTh8aTkjqMoC8fA4Hsy1</a>
+</div>
+<div class="row-link">
+<span class="prefix">Click the link below to sign up for GoHighLevel 14 Day Free Trial:</span>
+<span class="tag tag-link">GHL</span>
+<a href="https://www.gohighlevel.com/?fp_ref=tacticalconsulting-io45" target="_blank" rel="noopener">https://www.gohighlevel.com/?fp_ref=tacticalconsulting-io45</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-7-1">✅ | AI Agency Worksheet & Checklist</h2>
+<div class="rows">
+<div class="row">
+<div class="row-link">
+<span class="prefix">Access the Worksheet:</span>
+<span class="tag tag-sheet">SHEET</span>
+<a href="https://docs.google.com/spreadsheets/d/1VybZo9gzFHLr96yqDA6GbGy3epRi4bM2eLIlj_GjWmQ/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/spreadsheets/d/1VybZo9gzFHLr96yqDA6GbGy3epRi4bM2eLIlj_GjWmQ/edit?usp=sharing</a>
+</div>
+<div class="row-link">
+<span class="prefix">Access the Checklist:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1jbh9n6T6LLUAMOzO6iOEjFPlZbS6aCl2cM59DihEmIk/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1jbh9n6T6LLUAMOzO6iOEjFPlZbS6aCl2cM59DihEmIk/edit?usp=sharing</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-7-2">📖 | Playbooks</h2>
+<div class="rows">
+<div class="row">
+<div class="row-link">
+<span class="prefix">Paid Ads Playbook:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/19apueDYR8Gt3idnyJYKsSaE11SHiaywympoCGDPvcME/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/19apueDYR8Gt3idnyJYKsSaE11SHiaywympoCGDPvcME/edit?usp=sharing</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">AI Agency Offer Playbook:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1UN53QhtsZBvvzShGyfq7LvE49G46P8vgUjPooA0MSG0/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1UN53QhtsZBvvzShGyfq7LvE49G46P8vgUjPooA0MSG0/edit?usp=sharing</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">Sales Playbook:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1uisQSm-Lu6m2GntHvfkYu-lPHT3jBEUA9AycUfNHchA/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1uisQSm-Lu6m2GntHvfkYu-lPHT3jBEUA9AycUfNHchA/edit?usp=sharing</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">Organic Content Playbook:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1g23RYtd6uQbF-bYCjSJjBxdk1arTlGlPqdyQtkEGgWc/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1g23RYtd6uQbF-bYCjSJjBxdk1arTlGlPqdyQtkEGgWc/edit?usp=sharing</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">Objection handling framework:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1cQI6ew-oAfn9pG7SvPe8PXFX62B93Lvh1dg8HD52oDw/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1cQI6ew-oAfn9pG7SvPe8PXFX62B93Lvh1dg8HD52oDw/edit?usp=sharing</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-7-3">📝 | Sales Scripts</h2>
+<div class="rows">
+<div class="row">
+<div class="row-link">
+<span class="prefix">Phone setting script:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1jFDiyvEhlW4J0-ujYu6kDwY-RnbZczEg/edit?usp=sharing&ouid=112203268616633851588&rtpof=true&sd=true" target="_blank" rel="noopener">https://docs.google.com/document/d/1jFDiyvEhlW4J0-ujYu6kDwY-RnbZczEg/edit?usp=sharing&ouid=112203268616633851588&rtpof=true&sd=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">SMS/text setting script:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1fR22TuOckD3PDeSfp1wqG9e1mfExZYSUbsk3P0VVQJ8/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1fR22TuOckD3PDeSfp1wqG9e1mfExZYSUbsk3P0VVQJ8/edit?usp=sharing</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">Sales call script:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1hrDlQ4I1wNqMByk5AQYqHZ2iWI72TsTD/edit?usp=sharing&ouid=112203268616633851588&rtpof=true&sd=true" target="_blank" rel="noopener">https://docs.google.com/document/d/1hrDlQ4I1wNqMByk5AQYqHZ2iWI72TsTD/edit?usp=sharing&ouid=112203268616633851588&rtpof=true&sd=true</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">Objection handling framework:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1cQI6ew-oAfn9pG7SvPe8PXFX62B93Lvh1dg8HD52oDw/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1cQI6ew-oAfn9pG7SvPe8PXFX62B93Lvh1dg8HD52oDw/edit?usp=sharing</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-7-4">💻 | Templates</h2>
+<div class="rows">
+<div class="row">
+<div class="row-link">
+<span class="prefix">VSL Video Template:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1BiLWjAmPtIFSzIws1JKqyzGdzLGFbJbBYpCU-_N1WcE/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1BiLWjAmPtIFSzIws1JKqyzGdzLGFbJbBYpCU-_N1WcE/edit?usp=sharing</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">Precall Video Template:</span>
+<span class="tag tag-doc">SLIDES</span>
+<a href="https://docs.google.com/presentation/d/1NVT2tK4ME9WFxMIy7FQyArVsfoB6-kvSXSBsuJ7oiHY/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/presentation/d/1NVT2tK4ME9WFxMIy7FQyArVsfoB6-kvSXSBsuJ7oiHY/edit?usp=sharing</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">Canva Ad Templates:</span>
+<span class="tag tag-doc">CANVA</span>
+<a href="https://www.canva.com/design/DAF9i-Kyw3I/S0cD_qwy_GOheLCuMdCKig/edit" target="_blank" rel="noopener">https://www.canva.com/design/DAF9i-Kyw3I/S0cD_qwy_GOheLCuMdCKig/edit</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">1-Pager Template:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1yi9ye6ek5-XFi2g75Y0MFCnpHChjTQY24DsHB0pL5EI/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1yi9ye6ek5-XFi2g75Y0MFCnpHChjTQY24DsHB0pL5EI/edit?usp=sharing</a>
+</div>
+</div>
+</div>
+<h2 class="sub-head" id="mod-7-5">🧶 | Miscellaneous Materials</h2>
+<div class="rows">
+<div class="row">
+<div class="row-link">
+<span class="prefix">AI caller comparisons doc:</span>
+<span class="tag tag-doc">DOC</span>
+<a href="https://docs.google.com/document/d/1pBETHgPgErpvTj10_TeKqVqwmzcxFWro7nNxcDitu3U/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1pBETHgPgErpvTj10_TeKqVqwmzcxFWro7nNxcDitu3U/edit?usp=sharing</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">Whitelabel Testimonial Drive:</span>
+<span class="tag tag-doc">DRIVE</span>
+<a href="https://drive.google.com/drive/folders/1GkD8HNvsronG8nxeJQFDrEdgOSA-k5oj?usp=sharing" target="_blank" rel="noopener">https://drive.google.com/drive/folders/1GkD8HNvsronG8nxeJQFDrEdgOSA-k5oj?usp=sharing</a>
+</div>
+</div>
+<div class="row">
+<div class="row-link">
+<span class="prefix">Links To All My Resources/Docs/Links:</span>
+<span class="tag tag-link">LINK</span>
+<a href="https://sites.leadconnectorhq.com/preview/yHXrSkx3qJ6ahDVX3sY4?notrack=true" target="_blank" rel="noopener">https://sites.leadconnectorhq.com/preview/yHXrSkx3qJ6ahDVX3sY4?notrack=true</a>
+</div>
+</div>
+</div>
+</section>
+<footer>106 resources · AI Agency Mastermind Library</footer>
+</main>
+</body>
+</html>
